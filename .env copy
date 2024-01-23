@@ -1,0 +1,8 @@
+secret="super secret"
+
+DATABASE_URL="postgres://postgres:Abc@1234@62.72.0.179:5432/velodate"
+
+# gmail_username="developer@theitgigs.com"
+# password="Gigs@123"
+gmail_username="parmarkamil98@gmail.com"
+password="xnbmrjkfzzqxznhr"

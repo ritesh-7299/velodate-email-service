@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model admin_users {
+  id         Int       @id @default(autoincrement())
+  fullname   String?   @db.VarChar(255)
+  email      String?   @db.VarChar(255)
+  contact    String?   @db.VarChar(25)
+  password   String?   @db.VarChar(500)
+  isactive   Boolean?
+  createdate DateTime? @default(now()) @db.Timestamp(6)
+  updatedate DateTime? @db.Date
+  dob        DateTime? @db.Date
+  gender     String?   @db.VarChar(50)
+  resettoken String?
+}
+
+model emails {
+  id        Int       @id @default(autoincrement())
+  title     String?   @db.VarChar(255)
+  message   String?
+  target_to String?   @db.VarChar(255)
+  date      DateTime? @db.Date
+  file      String?
+  isactive  Boolean?  @default(true)
+}
+
+model interests {
+  id            Int     @id @default(autoincrement())
+  name          String  @db.VarChar(255)
+  isactive      Boolean
+  category      String  @db.VarChar(255)
+  category_name String? @db.VarChar(255)
+}
+
+model my_matches {
+  id              Int       @id @default(autoincrement())
+  user_id         Int?
+  matched_user_id Int?
+  match_date      DateTime? @db.Date
+  channel_id      String?
+}
+
+model notifications {
+  id        Int       @id @default(autoincrement())
+  title     String?   @db.VarChar(255)
+  message   String?
+  target_to String?   @db.VarChar(255)
+  date      DateTime? @db.Date
+  isactive  Boolean?  @default(true)
+}
+
+model photos {
+  id     Int     @id @default(autoincrement())
+  userid Int
+  url    String?
+  users  users   @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "photos_userid_fk")
+}
+
+model policy {
+  id          Int     @id @default(autoincrement())
+  description String?
+}
+
+model reports {
+  report_id                             Int       @id @default(autoincrement())
+  reporting_userid                      Int?
+  reported_userid                       Int?
+  report_type                           String?   @db.VarChar(50)
+  report_status                         String?   @db.VarChar(50)
+  reportdate                            DateTime? @default(now()) @db.Timestamp(6)
+  users_reports_reported_useridTousers  users?    @relation("reports_reported_useridTousers", fields: [reported_userid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users_reports_reporting_useridTousers users?    @relation("reports_reporting_useridTousers", fields: [reporting_userid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model user_otp {
+  id        Int      @id @default(autoincrement())
+  to_number String   @db.VarChar(20)
+  otp       String   @db.VarChar(6)
+  status    String?  @default("True") @db.VarChar(200)
+  isactive  Boolean? @default(false)
+}
+
+model users {
+  id                                      Int       @id @default(autoincrement())
+  fullname                                String?   @db.VarChar(50)
+  email                                   String?   @db.VarChar(50)
+  contact                                 String?   @db.VarChar(20)
+  password                                String?   @db.VarChar(500)
+  address                                 String?   @db.VarChar(255)
+  profile_img                             String?   @db.VarChar(255)
+  birthdate                               DateTime? @db.Date
+  gender                                  String?   @db.VarChar(6)
+  isshowgender                            Boolean?
+  liketodate                              String?   @db.VarChar(12)
+  thingstodo                              String?
+  isactive                                Boolean?
+  createdate                              DateTime? @default(now()) @db.Timestamp(6)
+  updatedate                              DateTime? @db.Date
+  googleid                                String?   @db.VarChar(255)
+  latitude                                Decimal?  @db.Decimal(9, 6)
+  longitude                               Decimal?  @db.Decimal(9, 6)
+  noti_new_matches                        Boolean?  @default(true)
+  noti_new_msg                            Boolean?  @default(true)
+  noti_announcements                      Boolean?  @default(true)
+  device_token                            String?   @db.VarChar(255)
+  device_type                             String?   @db.VarChar(255)
+  sendbird_user_id                        String?   @db.VarChar(255)
+  platform                                String?   @db.VarChar(25)
+  email_new_matches                       Boolean?  @default(true)
+  email_new_msg                           Boolean?  @default(true)
+  email_announcements                     Boolean?  @default(true)
+  photos                                  photos[]
+  reports_reports_reported_useridTousers  reports[] @relation("reports_reported_useridTousers")
+  reports_reports_reporting_useridTousers reports[] @relation("reports_reporting_useridTousers")
+}
+
+model visitors {
+  id          Int       @id(map: "visiters_pkey") @default(autoincrement())
+  device_type String?   @db.VarChar(25)
+  createdate  DateTime? @default(now()) @db.Timestamp(6)
+}
