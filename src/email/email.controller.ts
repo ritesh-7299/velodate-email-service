@@ -12,7 +12,7 @@ import { EmailService } from './email.service';
 import { SendEmailDto } from './dto/send-email.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 
-@Controller('email')
+@Controller('api/email')
 export class EmailController {
   constructor(private readonly emailService: EmailService) {}
 
